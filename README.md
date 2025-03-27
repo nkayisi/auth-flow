@@ -5,32 +5,43 @@ A modern Next.js template that streamlines authentication and user profile manag
 ## Project Structure
 
 ```
-📂 auth-flow/                             # Project root directory
-│── 📂 src/                               # Main source code
-│   ├── 📂 app/                           # Pages and routes (Next.js App Router)
-│   │   ├── 📂 api/                       # API routes (authentication, and other server-side routes of Next.js)
-│   │   │   └── 📂 auth/                  # Authentication routes
-│   │   ├── 📄 page.tsx                   # Main page (landing page or project home page)
-│   │   ├── 📄 layout.tsx                 # Global layout
-│   │   ├── 📄 global.css                 # Global styles
-│   │   ├── 📂 components/                # Reusable components
-│   │   │   ├── 📂 modals/                # Dialog components (for all modals in the project)
-│   │   │   ├── 📂 ui/                    # Components from the UI library
-│   │   │   │   └── 📂 custom/            # Custom UI components
-│   │   │   └── 📂 wrappers/              # Encapsulation components (auth, providers)
-│   │   │       ├── 📂 auth/              # Authentication wrapper components
-│   │   │       └── 📂 providers/         # Provider wrapper components
-│   │   ├── 📂 lib/                       # Certaines Logique métier
-│   │   │   ├── 📂 actions/               # Server actions
-│   │   │   │   └── 📄 auth-actions.ts    # Server actions for authentication
-│   │   │   └── 📂 utils/                 # Utility functions
-│   │   └── 📄 auth.ts                    # Authentication configuration file
-│── 📂 public/                            # Static files (SVG, images)
-│── 📄 .env.local.template                # Template for environment variables
-│── 📄 next.config.ts                     # Next.js configuration
-│── 📄 package.json                       # Dependencies and scripts
-│── 📄 tailwind.config.ts                 # Tailwind CSS configuration
-└── 📄 tsconfig.json                      # TypeScript configuration
+📂 auth-flow/                         # Project root directory
+│── 📂 src/                           # Main source code
+│   ├── 📂 app/                       # Pages and routes (Next.js App Router)
+│   │   ├── 📂 api/                   # API routes (authentication, and other server-side routes of Next.js)
+│   │   │   └── 📂 auth/              # Authentication routes
+│   │   ├── 📂 dashboard/             # Group of routes for authenticated users
+│   │   │   ├── 📄 layout.tsx         # Dashboard layout (for authenticated users)
+│   │   │   └── 📄 page.tsx           # Dashboard page (for authenticated users)
+│   │   ├── 📂 (site)/                # Group of routes for authenticated users
+│   │   │   ├── 📂 about/             # About route (for landing page pages)
+│   │   │   └── 📂 service/           # Service route (for landing page pages)
+│   │   ├── 📄 page.tsx               # Main page (landing page or project home page)
+│   │   ├── 📄 layout.tsx             # Global layout
+│   │   └── 📄 global.css             # Global styles
+│   ├── 📂 components/                # Reusable components
+│   │   ├── 📂 forms/                 # Specific form components
+│   │   ├── 📂 layouts/               # Layout components (Navbar, Sidebar)
+│   │   ├── 📂 modals/                # Dialog components (for all modals in the project)
+│   │   ├── 📂 ui/                    # Components from the UI library
+│   │   │   └── 📂 custom/            # Custom UI components
+│   │   └── 📂 wrappers/              # Encapsulation components (auth, providers)
+│   │       ├── 📂 auth/              # Authentication wrapper components
+│   │       └── 📂 providers/         # Provider wrapper components
+│   │── 📂 lib/                       # Business Logic
+│   │   ├── 📂 actions/               # Server actions
+│   │   │   └── 📄 auth-actions.ts    # Server actions for authentication
+│   │   └── 📂 utils/                 # Utility functions
+│   │── 📂 types/                     # Type definitions
+│   │   └── 📄 next-auth.d.ts         # NextAuth type definitions
+│   ├── 📄 auth.ts                    # Authentication configuration file
+│   └── 📄 middleware.ts              # Middleware configuration file
+├── 📂 public/                        # Static files (SVG, images)
+├── 📄 .env.local.template            # Template for environment variables
+├── 📄 next.config.ts                 # Next.js configuration
+├── 📄 package.json                   # Dependencies and scripts
+├── 📄 tailwind.config.ts             # Tailwind CSS configuration
+└── 📄 tsconfig.json                  # TypeScript configuration
 ```
 
 
