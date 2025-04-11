@@ -11,6 +11,7 @@ declare module "next-auth" {
     user?: User & DefaultSession["user"]
     error?: string;
     accessToken?: string;
+    refreshToken?: string;
   }
 }
 

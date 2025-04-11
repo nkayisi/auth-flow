@@ -1,6 +1,42 @@
 import NextAuth from "next-auth";
+import type { JWT } from "next-auth/jwt";
 import GitHub from "next-auth/providers/github";
 import Keycloak from "next-auth/providers/keycloak";
+
+
+async function refreshAccesssToken(token: JWT) {
+
+    const params = new URLSearchParams();
+    params.append('client_id', process.env.AUTH_KEYCLOAK_ID ?? '');
+    params.append('client_secret', process.env.AUTH_KEYCLOAK_SECRET ?? '');
+    params.append('grant_type', 'refresh_token');
+
+    if (token.refreshToken) {
+        params.append('refresh_token', token.refreshToken);
+    } else {
+        throw new Error('Missing refresh token');
+    }
+
+    const response = await fetch(`${process.env.AUTH_KEYCLOAK_ISSUER}/protocol/openid-connect/token`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params,
+    });
+
+    const data = await response.json();
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>> REFRESH CALLED :)")
+    if (!response.ok) throw data;
+
+    return {
+        ...token,
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token,
+        expiresAt: Math.floor(Date.now() / 1000 + (data.expires_in ?? 0))
+    }
+
+}
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
     providers: [
@@ -19,7 +55,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             const isLoggedIn = !!auth;
             const defaultCallback = new URL(process.env.NEXT_DEFAULT_CALLBACK_PATH || "/", process.env.NEXTAUTH_URL).toString();
             const callbackUrl = nextUrl.searchParams.get("callbackUrl");
-            
+
             if (isLoggedIn) {
                 return callbackUrl ? Response.redirect(callbackUrl || defaultCallback) : true;
             }
@@ -41,29 +77,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
             // Refresh du token
             try {
-                const response = await fetch(`${process.env.AUTH_KEYCLOAK_ISSUER}/protocol/openid-connect/token`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        client_id: process.env.AUTH_KEYCLOAK_ID ?? '',
-                        client_secret: process.env.AUTH_KEYCLOAK_SECRET ?? '',
-                        grant_type: 'refresh_token',
-                        refresh_token: token.refreshToken as string,
-                    }),
-                });
-
-                const tokens = await response.json();
-
-                if (!response.ok) throw tokens;
-
-                return {
-                    ...token,
-                    accessToken: tokens.access_token,
-                    refreshToken: tokens.refresh_token ?? token.refreshToken,
-                    expiresAt: Math.floor(Date.now() / 1000 + (tokens.expires_in ?? 0)),
-                };
+                const refreshedToken = await refreshAccesssToken(token)
+                return refreshedToken;
             } catch (error) {
                 console.error('Error refreshing access token', error);
                 // En cas d'erreur, on marque le token comme invalide
@@ -80,11 +95,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
                 loginUrl.searchParams.set("error", "RefreshAccessTokenError");
                 throw new Error("RefreshAccessTokenError");
             }
-            
+
             return {
                 ...session,
                 error: token.error,
                 accessToken: token.accessToken,
+                refreshToken: token.refreshToken,
             };
         },
     },

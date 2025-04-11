@@ -8,7 +8,7 @@ export default async function Home() {
 
   if (session?.user) {
     return (
-      <div className="flex flex-col gap-5 items-center justify-center h-screen">
+      <div className="flex flex-col flex-1 gap-5 items-center justify-center">
         <p>User signed in with name : {session.user.name}</p>
         <p>User signed in with email : {session.user.email}</p>
         <SignOutButton />
@@ -17,7 +17,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="flex flex-col gap-5 items-center justify-center h-screen">
+    <div className="flex flex-col flex-1 gap-5 items-center justify-center">
       <p>User not signed In</p>
       <SignInButton provider="keycloak" />
       <SignInButton provider="github" />
