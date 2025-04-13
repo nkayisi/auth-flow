@@ -1,14 +1,17 @@
-'use client'
+"use client";
 
-import { singOutAction } from '@/lib/actions/auth-actions'
-
+import { singOutAction } from "@/lib/actions/auth-actions";
+import { Button } from "@heroui/button";
 
 export default function SignOutButton() {
   return (
-    <button className='p-3 border rounded-md hover:bg-gray-200 duration-500'
-      onClick={() => singOutAction()}
+    <Button
+      color="danger"
+      variant="solid"
+      radius="md"
+      onPress={() => singOutAction()}
     >
       Sign Out
-    </button>
-  )
+    </Button>
+  );
 }

@@ -10,9 +10,10 @@
   },
   "dependencies": {
     "@heroui/button": "^2.2.16",
+    "@heroui/react": "^2.7.6",
     "@heroui/system": "^2.4.12",
     "@heroui/theme": "^2.4.12",
-    "next": "15.2.2",
+    "next": "^15.3.0",
     "next-auth": "^5.0.0-beta.25",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
